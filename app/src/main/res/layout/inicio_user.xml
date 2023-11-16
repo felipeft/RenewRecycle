@@ -140,7 +140,7 @@
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@id/toolbar4"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.658"
+            app:layout_constraintHorizontal_bias="0.699"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.223" />
@@ -167,10 +167,10 @@
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@id/toolbar4"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.658"
+            app:layout_constraintHorizontal_bias="0.699"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.342" />
+            app:layout_constraintVertical_bias="0.341" />
 
         <TextView
             android:layout_width="237dp"

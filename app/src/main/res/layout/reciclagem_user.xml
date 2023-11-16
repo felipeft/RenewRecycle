@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.core.widget.NestedScrollView xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/background_recycle"
+        tools:context=".RecycleUser">
+
+        <!-- Elementos específicos para o modo Usuário -->
+
+        <View
+            android:id="@+id/ContainerComponents"
+            style="@style/ContainerComponentsCadastro"
+            android:layout_width="365dp"
+            android:layout_height="624dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.362" />
+
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="85dp"
+            android:layout_height="85dp"
+            android:layout_marginTop="4dp"
+            android:src="@drawable/logo"
+            app:layout_constraintEnd_toEndOf="@id/ContainerComponents"
+            app:layout_constraintHorizontal_bias="0.975"
+            app:layout_constraintStart_toStartOf="@id/ContainerComponents"
+            app:layout_constraintTop_toTopOf="@id/ContainerComponents" />
+
+
+        <ImageView
+            android:id="@+id/btnVoltar"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="568dp"
+            app:layout_constraintEnd_toEndOf="@id/ContainerComponents"
+            app:layout_constraintHorizontal_bias="0.046"
+            app:layout_constraintStart_toStartOf="@id/ContainerComponents"
+            app:layout_constraintTop_toTopOf="@id/ContainerComponents"
+            app:srcCompat="@drawable/ic_back" />
+
+        <TextView
+            android:id="@+id/Emp"
+            android:layout_width="320dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="104dp"
+            android:text="Empresa"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@id/ContainerComponents"
+            app:layout_constraintHorizontal_bias="0.488"
+            app:layout_constraintStart_toStartOf="@id/ContainerComponents"
+            app:layout_constraintTop_toTopOf="@id/ContainerComponents" />
+
+        <TextView
+            android:id="@+id/EmpInf"
+            android:layout_width="320dp"
+            android:layout_height="75dp"
+            android:layout_marginTop="132dp"
+            android:text="Nome da Empresa"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="@id/ContainerComponents"
+            app:layout_constraintHorizontal_bias="0.488"
+            app:layout_constraintStart_toStartOf="@id/ContainerComponents"
+            app:layout_constraintTop_toTopOf="@id/ContainerComponents" />
+
+        <TextView
+            android:id="@+id/Contato"
+            android:layout_width="320dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="212dp"
+            android:text="Contato"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@id/ContainerComponents"
+            app:layout_constraintHorizontal_bias="0.488"
+            app:layout_constraintStart_toStartOf="@id/ContainerComponents"
+            app:layout_constraintTop_toTopOf="@id/ContainerComponents" />
+
+        <TextView
+            android:id="@+id/ConntatoInf"
+            android:layout_width="320dp"
+            android:layout_height="75dp"
+            android:layout_marginTop="244dp"
+            android:text="akndsf@gmail.com"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="@id/ContainerComponents"
+            app:layout_constraintHorizontal_bias="0.488"
+            app:layout_constraintStart_toStartOf="@id/ContainerComponents"
+            app:layout_constraintTop_toTopOf="@id/ContainerComponents" />
+
+        <TextView
+            android:id="@+id/Horario"
+            android:layout_width="320dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="324dp"
+            android:text="Horário de funcionamento"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@id/ContainerComponents"
+            app:layout_constraintHorizontal_bias="0.488"
+            app:layout_constraintStart_toStartOf="@id/ContainerComponents"
+            app:layout_constraintTop_toTopOf="@id/ContainerComponents" />
+
+        <TextView
+            android:id="@+id/HorarioInf"
+            android:layout_width="320dp"
+            android:layout_height="75dp"
+            android:layout_marginTop="352dp"
+            android:text="8:00-16:00"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="@id/ContainerComponents"
+            app:layout_constraintHorizontal_bias="0.488"
+            app:layout_constraintStart_toStartOf="@id/ContainerComponents"
+            app:layout_constraintTop_toTopOf="@id/ContainerComponents" />
+
+        <TextView
+            android:id="@+id/Pesagem"
+            android:layout_width="320dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="432dp"
+            android:text="Pesagem"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@id/ContainerComponents"
+            app:layout_constraintHorizontal_bias="0.488"
+            app:layout_constraintStart_toStartOf="@id/ContainerComponents"
+            app:layout_constraintTop_toTopOf="@id/ContainerComponents" />
+
+        <TextView
+            android:id="@+id/PesagemInf"
+            android:layout_width="320dp"
+            android:layout_height="75dp"
+            android:layout_marginTop="460dp"
+            android:text="1kg 100 pontos"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="@id/ContainerComponents"
+            app:layout_constraintHorizontal_bias="0.488"
+            app:layout_constraintStart_toStartOf="@id/ContainerComponents"
+            app:layout_constraintTop_toTopOf="@id/ContainerComponents" />
+
+        <Button
+            android:id="@+id/btnRecycle"
+            android:layout_width="190dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="24dp"
+            android:backgroundTint="@color/green_d"
+            android:text="Reciclar"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="@id/ContainerComponents"
+            app:layout_constraintHorizontal_bias="0.868"
+            app:layout_constraintStart_toStartOf="@id/ContainerComponents"
+            app:layout_constraintTop_toBottomOf="@id/PesagemInf" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

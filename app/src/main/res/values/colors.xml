@@ -5,4 +5,7 @@
     <color name="green_d">#2D7D30</color>
     <color name="green_l">#46A84A</color>
     <color name="green_dark">#0A5D0D</color>
+    <color name="green_dr">#044407</color>
+    <color name="green_dlr">#177D1C</color>
+    <color name="green_lr">#58CF5E</color>
 </resources>
