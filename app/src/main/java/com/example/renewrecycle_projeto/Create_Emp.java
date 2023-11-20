@@ -23,6 +23,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -80,6 +81,8 @@ public class Create_Emp extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Preencha todos os campos", Toast.LENGTH_SHORT).show();
                 }else{
                     cadastrarEmp(v);
+
+                   // startActivity(new Intent(Create_Emp.this, InicioEmp.class));
                 }
             }
         });
@@ -101,10 +104,11 @@ public class Create_Emp extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
                     SalvarDadosEmp();
-
+                    bdHistorico();
                     //SALVO NO BANCO DE DADOS
                     Toast.makeText(getApplicationContext(), "Cadastro realizado com sucesso", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(Create_Emp.this, Login_Empresa.class));
+                    startActivity(new Intent(Create_Emp.this, InicioEmp.class));
+                    finish();
                 }else{
                     String erro;
                     try {
@@ -141,10 +145,35 @@ public class Create_Emp extends AppCompatActivity {
         users.put("celular", celular);
         users.put("endereco", endereco);
         users.put("cnpj", cnpj);
+        users.put("horario", "");
+        users.put("peso", "");
 
         EmpID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         DocumentReference docRefer = db.collection("Empresas").document(EmpID);
+        docRefer.set(users).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("db","Sucesso ao salvar os dados");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("db_error","Erro ao salvar os dados" + e.toString());
+                    }
+                });
+    }
+
+    private void bdHistorico(){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        Map<String,Object> users = new HashMap<>();
+        users.put("vazio", "Nada reciclado ainda");                       //TESTE
+
+        EmpID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        DocumentReference docRefer = db.collection("HistoricoEmpresas").document(EmpID);
         docRefer.set(users).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {

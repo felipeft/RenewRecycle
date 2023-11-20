@@ -1,5 +1,7 @@
 package com.example.renewrecycle_projeto;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Dialog;
@@ -7,20 +9,38 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+
+import java.util.HashMap;
+import java.util.Map;
+
 public class RecycleUser extends AppCompatActivity {
 
     Button Reciclar;
-    private TextView Voltar;
+    private ImageView Voltar;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    String userID;
+    String UserID;
+    String Nome, Endereco, Celular, pontosString, pesoEmpresa, PontosBD;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +49,29 @@ public class RecycleUser extends AppCompatActivity {
 
         Reciclar = findViewById(R.id.btnRecycle);
         Voltar = findViewById(R.id.btnVoltar);
+        // Recupera os dados do Intent
+        Intent intent = getIntent();
+        String nomeEmpresa = intent.getStringExtra("nome");
+        String enderecoEmpresa = intent.getStringExtra("endereco");
+        String celularEmpresa = intent.getStringExtra("celular");
+        String horarioEmpresa = intent.getStringExtra("horario");
+        pesoEmpresa = intent.getStringExtra("peso");
+
+        // Agora, você pode usar 'nomeEmpresa' e 'enderecoEmpresa' conforme necessário na sua InfEmpresas Activity
+        // Por exemplo, você pode exibir esses valores em TextViews ou qualquer outro componente da interface do usuário.
+
+        // Exemplo de exibição em TextViews:
+        TextView textViewNome = findViewById(R.id.EmpInf);
+        TextView textViewEndereco = findViewById(R.id.EnderecoInf);
+        TextView textViewContato = findViewById(R.id.ContatoInf);
+        TextView textViewHorario = findViewById(R.id.HorarioInf);
+        TextView textViewPeso = findViewById(R.id.PesagemInf);
+
+        textViewNome.setText(nomeEmpresa);
+        textViewEndereco.setText(enderecoEmpresa);
+        textViewContato.setText(celularEmpresa);
+        textViewHorario.setText(horarioEmpresa);
+        textViewPeso.setText(pesoEmpresa);
 
         Reciclar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -40,7 +83,28 @@ public class RecycleUser extends AppCompatActivity {
         Voltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // startActivity(new Intent(RecycleUser.this, MAPA.class));
+              startActivity(new Intent(RecycleUser.this, MapUser.class));
+            }
+        });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+        userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        DocumentReference DocRefer = db.collection("Usuarios").document(userID);
+        DocRefer.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException error) {
+                if (documentSnapshot != null){
+                    Nome = documentSnapshot.getString("nome");
+                    Celular = documentSnapshot.getString("celular");
+                    Endereco = documentSnapshot.getString("endereco");
+                    PontosBD = documentSnapshot.getString("pontos");
+                }
             }
         });
     }
@@ -50,15 +114,46 @@ public class RecycleUser extends AppCompatActivity {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.modal_recycle);
 
+
         EditText kg = dialog.findViewById(R.id.kg);
         Button ok = dialog.findViewById(R.id.btnOK);
-        TextView voltar = dialog.findViewById(R.id.btnVoltar);
+        ImageView voltar = dialog.findViewById(R.id.btnVoltar);
 
         ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Atualizar pontuação
-                Toast.makeText(getApplicationContext(), "Pontos adicionados", Toast.LENGTH_SHORT).show();
+                // pesoEmp    100 pontos
+                // pesoUser   x pontos
+                // x * pesoEmp = 100 * pesoUser  =>  x = 100*pesoUser/pesoEmp
+                EditText kgEditText = dialog.findViewById(R.id.kg);
+
+                // Obter o texto digitado no EditText
+                String pesoDigitado = kgEditText.getText().toString();
+
+                // Verificar se o campo não está vazio antes de tentar converter para inteiro
+                if (!pesoDigitado.isEmpty()) {
+                    try {
+                        // Converter o texto para um número inteiro
+                        int pesoUsuario = Integer.parseInt(pesoDigitado);
+                        int pesoEmp = Integer.parseInt(pesoEmpresa);
+                        int pontosBD = Integer.parseInt(PontosBD);
+                        // Realizar cálculos ou qualquer outra lógica com o valor obtido
+                        int pontosCalc = (100 * pesoUsuario) / pesoEmp;
+                        int pontos = pontosCalc + pontosBD;
+                        // Transformar pontos em String
+                        pontosString = String.valueOf(pontos);
+                        // Colocar pontosString no banco de dados
+                        SalvarDadosUser();
+                        Toast.makeText(getApplicationContext(), "Pontos adicionados: " + pontosCalc, Toast.LENGTH_SHORT).show();
+                    } catch (NumberFormatException e) {
+                        // Tratar caso o texto não possa ser convertido para inteiro
+                        Toast.makeText(getApplicationContext(), "Digite um valor válido em kg.", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    // Tratar o caso em que o campo está vazio
+                    Toast.makeText(getApplicationContext(), "Digite um valor em kg.", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -74,5 +169,32 @@ public class RecycleUser extends AppCompatActivity {
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT) );
         dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
         dialog.getWindow().setGravity(Gravity.BOTTOM);
+    }
+
+    private void SalvarDadosUser(){
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        Map<String,Object> users = new HashMap<>();
+        users.put("nome", Nome);
+        users.put("celular", Celular);
+        users.put("endereco", Endereco);
+        users.put("pontos", pontosString);
+
+        UserID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        DocumentReference docRefer = db.collection("Usuarios").document(UserID);
+        docRefer.set(users).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("db","Sucesso ao salvar os dados");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("db_error","Erro ao salvar os dados" + e.toString());
+                    }
+                });
     }
 }

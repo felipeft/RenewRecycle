@@ -122,10 +122,11 @@
             app:srcCompat="@drawable/ic_company" />
 
         <TextView
+            android:id="@+id/NomeEmp"
             android:layout_width="300dp"
             android:layout_height="60dp"
             android:gravity="left"
-            android:text="@string/ExPerfil"
+            android:text=""
             android:textColor="@color/black"
             android:textSize="18sp"
             android:textStyle="bold"
@@ -149,10 +150,11 @@
             app:srcCompat="@drawable/ic_emailcompany" />
 
         <TextView
+            android:id="@+id/EmailEmp"
             android:layout_width="300dp"
             android:layout_height="60dp"
             android:gravity="left"
-            android:text="@string/ExEmail"
+            android:text=""
             android:textColor="@color/black"
             android:textSize="18sp"
             android:textStyle="bold"

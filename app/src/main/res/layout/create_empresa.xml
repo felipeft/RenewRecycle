@@ -10,7 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/background_login"
+        android:background="@color/green_back"
         tools:context=".Create_Emp">
 
         <ImageView
@@ -93,6 +93,7 @@
             android:id="@+id/CNPJ"
             style="@style/EditTextEmp"
             android:hint="CNPJ"
+            android:inputType="number"
             app:layout_constraintStart_toStartOf="@id/ContainerComponents"
             app:layout_constraintEnd_toEndOf="@id/ContainerComponents"
             app:layout_constraintTop_toBottomOf="@id/AddressCompany"/>

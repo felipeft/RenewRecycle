@@ -100,10 +100,11 @@ public class Create_User extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
                     SalvarDadosUser();
-
+                    bdHistorico();
                     //SALVO NO BANCO DE DADOS
                     Toast.makeText(getApplicationContext(), "Cadastro realizado com sucesso", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(Create_User.this, MainActivity.class));
+                    startActivity(new Intent(Create_User.this, InicioUser.class));
+                    finish();
                 }else{
                     String erro;
                     try {
@@ -138,6 +139,7 @@ public class Create_User extends AppCompatActivity {
         users.put("nome", nome);
         users.put("celular", celular);
         users.put("endereco", endereco);
+        users.put("pontos", "0");                        //TESTE
 
         UserID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
@@ -154,5 +156,28 @@ public class Create_User extends AppCompatActivity {
                 Log.d("db_error","Erro ao salvar os dados" + e.toString());
             }
         });
+    }
+
+    private void bdHistorico(){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        Map<String,Object> users = new HashMap<>();
+        users.put("vazio", "Nada reciclado ainda");                       //TESTE
+
+        UserID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        DocumentReference docRefer = db.collection("HistoricoUsuarios").document(UserID);
+        docRefer.set(users).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("db","Sucesso ao salvar os dados");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("db_error","Erro ao salvar os dados" + e.toString());
+                    }
+                });
     }
 }

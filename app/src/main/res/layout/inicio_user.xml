@@ -132,9 +132,10 @@
             app:srcCompat="@drawable/ic_perfiluser" />
 
         <TextView
+            android:id="@+id/NomeUser"
             android:layout_width="205dp"
             android:layout_height="60dp"
-            android:text="@string/ExPerfil"
+            android:text=""
             android:textColor="@color/white"
             android:textSize="18sp"
             android:textStyle="bold"
@@ -159,9 +160,10 @@
             app:srcCompat="@drawable/ic_email" />
 
         <TextView
+            android:id="@+id/EmailUser"
             android:layout_width="205dp"
             android:layout_height="60dp"
-            android:text="@string/ExEmail"
+            android:text=""
             android:textColor="@color/white"
             android:textSize="18sp"
             android:textStyle="bold"
@@ -187,18 +189,20 @@
             app:layout_constraintVertical_bias="0.484" />
 
         <TextView
-            android:layout_width="237dp"
-            android:layout_height="77dp"
+            android:id="@+id/Pontos"
+            android:layout_width="186dp"
+            android:layout_height="59dp"
             android:gravity="center"
-            android:text="100"
+            android:text=""
             android:textColor="@color/white"
             android:textSize="40sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@id/toolbar4"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.497"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.553" />
+            app:layout_constraintVertical_bias="0.59" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

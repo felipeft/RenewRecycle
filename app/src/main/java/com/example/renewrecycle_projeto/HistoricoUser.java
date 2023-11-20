@@ -1,5 +1,6 @@
 package com.example.renewrecycle_projeto;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -12,19 +13,30 @@ import android.widget.TextView;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+
 public class HistoricoUser extends AppCompatActivity {
 
+    TextView historico;
     ImageButton home;
     ImageButton edit;
     ImageButton exit;
     ImageButton map;
     ImageButton history;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    String histUserID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.historico_user);
 
+        historico = findViewById(R.id.Historico);
         home = findViewById(R.id.home);
         edit = findViewById(R.id.edit);
         exit = findViewById(R.id.exit);
@@ -81,5 +93,22 @@ public class HistoricoUser extends AppCompatActivity {
         });
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        histUserID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        DocumentReference DocRefer = db.collection("HistoricoUsuarios").document(histUserID);
+        DocRefer.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException error) {
+                if (documentSnapshot != null){
+                    historico.setText(documentSnapshot.getString("vazio"));
+                }
+            }
+        });
     }
 }

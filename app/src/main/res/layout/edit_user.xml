@@ -13,6 +13,12 @@
         android:background="@drawable/plant_menu"
         tools:context=".EditUser">
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/green_back"
+            android:alpha="0.5"></RelativeLayout>
+
         <View
             android:id="@+id/ContainerComponents"
             style="@style/ContainerComponentsEdit"
@@ -34,7 +40,8 @@
         <EditText
             android:id="@+id/NomeUser"
             style="@style/EditText_EditUser"
-            android:hint="Nome do Usuário"
+            android:text=""
+            android:hint="Nome do usuário"
             android:inputType="text"
             app:layout_constraintStart_toStartOf="@id/ContainerComponents"
             app:layout_constraintEnd_toEndOf="@id/ContainerComponents"
@@ -69,7 +76,7 @@
         <EditText
             android:id="@+id/SenhaUser"
             style="@style/EditText_EditUser"
-            android:hint="Senha"
+            android:hint="Nova senha"
             android:inputType="textPassword"
             app:layout_constraintStart_toStartOf="@id/ContainerComponents"
             app:layout_constraintEnd_toEndOf="@id/ContainerComponents"

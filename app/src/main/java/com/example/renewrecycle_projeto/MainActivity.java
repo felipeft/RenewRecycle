@@ -19,13 +19,21 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import android.util.Log;
+
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 public class MainActivity extends AppCompatActivity {
 
+    private static final String TAG = "MainActivity";
     EditText Email;
     EditText Senha;
     Button Entrar;
     private TextView Emp;
     private TextView Cadastro;
+    int aux = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
                     startActivity(new Intent(MainActivity.this, InicioUser.class));
+                    finish();
                 }else{
                     String erro;
                     try{

@@ -13,6 +13,12 @@
         android:background="@drawable/plant_menu"
         tools:context=".EditEmp">
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/green_back"
+            android:alpha="0.5"></RelativeLayout>
+
         <View
             android:id="@+id/ContainerComponents"
             style="@style/ContainerComponentsEdit"
