@@ -2,8 +2,12 @@ package com.example.renewrecycle_projeto;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import android.Manifest;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -50,6 +54,7 @@ public class InicioUser extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(InicioUser.this, EditUser.class));
+                finish();
             }
         });
 
@@ -65,6 +70,7 @@ public class InicioUser extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(InicioUser.this, MapUser.class));
+                finish();
             }
         });
 
@@ -72,6 +78,7 @@ public class InicioUser extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(InicioUser.this, HistoricoUser.class));
+                finish();
             }
         });
     }
@@ -102,6 +109,14 @@ public class InicioUser extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Permissões não concedidas, solicite-as
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.POST_NOTIFICATIONS},
+                    33);
+        }
 
         String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
         userID = FirebaseAuth.getInstance().getCurrentUser().getUid();

@@ -64,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, Login_Empresa.class));
+                finish();
             }
         });
 
@@ -71,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, Create_User.class));
+                finish();
             }
         });
     }
@@ -107,8 +109,27 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
 
         FirebaseUser atualUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (atualUser != null){
-            startActivity(new Intent(MainActivity.this, InicioUser.class));
+
+        if (atualUser != null) {
+            String uid = atualUser.getUid();
+
+            // Obter referência ao Firestore
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+            // Verificar se o usuário está na coleção "usuarios"
+            db.collection("Usuarios")
+                    .document(uid)
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful() && task.getResult() != null && task.getResult().exists()) {
+                            // Usuário está na coleção "Usuarios"
+                            startActivity(new Intent(MainActivity.this, InicioUser.class));
+                            finish();
+                        } else {
+                            startActivity(new Intent(MainActivity.this, InicioEmp.class));
+                            finish();
+                        }
+                    });
         }
     }
 

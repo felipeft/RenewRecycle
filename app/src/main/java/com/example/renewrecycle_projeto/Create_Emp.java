@@ -64,6 +64,7 @@ public class Create_Emp extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(Create_Emp.this, Create_User.class));
+                finish();
             }
         });
 
@@ -91,6 +92,7 @@ public class Create_Emp extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(Create_Emp.this, Login_Empresa.class));
+                finish();
             }
         });
     }

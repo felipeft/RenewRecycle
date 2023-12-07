@@ -57,6 +57,7 @@ public class Login_Empresa extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(Login_Empresa.this, MainActivity.class));
+                finish();
             }
         });
 
@@ -64,6 +65,7 @@ public class Login_Empresa extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(Login_Empresa.this, Create_Emp.class));
+                finish();
             }
         });
 
@@ -78,6 +80,7 @@ public class Login_Empresa extends AppCompatActivity{
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
                     startActivity(new Intent(Login_Empresa.this, InicioEmp.class));
+                    finish();
                 }else{
                     String erro;
                     try{
@@ -102,6 +105,7 @@ public class Login_Empresa extends AppCompatActivity{
         FirebaseUser atualUser = FirebaseAuth.getInstance().getCurrentUser();
         if (atualUser != null){
             startActivity(new Intent(Login_Empresa.this, InicioEmp.class));
+            finish();
         }
     }
 }

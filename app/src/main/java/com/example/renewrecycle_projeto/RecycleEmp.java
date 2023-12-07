@@ -66,6 +66,7 @@ public class RecycleEmp extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(RecycleEmp.this, InicioEmp.class));
+                finish();
             }
         });
     }

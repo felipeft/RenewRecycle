@@ -48,6 +48,7 @@ public class InicioEmp extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                   startActivity(new Intent(InicioEmp.this, EditEmp.class));
+                  finish();
             }
         });
 
@@ -62,7 +63,8 @@ public class InicioEmp extends AppCompatActivity {
         map.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                   startActivity(new Intent(InicioEmp.this, RecycleEmp.class));
+                   startActivity(new Intent(InicioEmp.this, MapEmp.class)) ;
+                   finish();
             }
         });
 
@@ -70,6 +72,7 @@ public class InicioEmp extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                  startActivity(new Intent(InicioEmp.this, HistoricoEmp.class));
+                 finish();
             }
         });
     }

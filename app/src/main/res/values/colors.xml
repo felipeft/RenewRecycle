@@ -8,5 +8,6 @@
     <color name="green_dr">#044407</color>
     <color name="green_dlr">#177D1C</color>
     <color name="green_lr">#58CF5E</color>
+    <color name="red">#E40404</color>
     <color name="green_back">#84b47c</color>
 </resources>

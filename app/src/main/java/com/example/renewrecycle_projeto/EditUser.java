@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,6 +24,10 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.firebase.auth.FirebaseUser;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,7 +38,7 @@ public class EditUser extends AppCompatActivity {
     EditText Celular;
     EditText Endereco;
     EditText Senha;
-    Button Salvar;
+    Button Salvar, Deletar;
     private TextView Voltar;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     String userID;
@@ -50,6 +56,7 @@ public class EditUser extends AppCompatActivity {
         Endereco = findViewById(R.id.AddressUser);
         Senha = findViewById(R.id.SenhaUser);
         Salvar = findViewById(R.id.btnSalvar);
+        Deletar = findViewById(R.id.btnDeletar);
         Voltar = findViewById(R.id.btnVoltar);
 
         Salvar.setOnClickListener(new View.OnClickListener() {
@@ -57,6 +64,10 @@ public class EditUser extends AppCompatActivity {
             public void onClick(View v) {
                 //SALVAR NO BANCO DE DADOS
                 SalvarDadosUser();
+                String novaSenha = Senha.getText().toString().trim();
+                if (!novaSenha.isEmpty() && novaSenha.length() >= 6) {
+                    resetPassword(novaSenha);
+                }
                 Toast.makeText(getApplicationContext(), "Alterações Salvas", Toast.LENGTH_SHORT).show();
                // startActivity(new Intent(EditUser.this, InicioUser.class));
             }
@@ -66,8 +77,59 @@ public class EditUser extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(EditUser.this, InicioUser.class));
+                finish();
             }
         });
+
+        Deletar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mostrarDialogoDeConfirmacao();
+            }
+        });
+    }
+
+    private void mostrarDialogoDeConfirmacao() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Tem certeza que deseja deletar sua conta?");
+        builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Ação a ser executada se o usuário confirmar a exclusão da conta
+                // Obtém a instância do usuário atual
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+                // Deleta permanentemente a conta do usuário
+                if (user != null) {
+                    user.delete()
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        Log.d("DeleteAccount", "Conta deletada com sucesso!");
+                                        // Aqui você pode adicionar qualquer ação adicional após a exclusão da conta
+                                        startActivity(new Intent(EditUser.this, MainActivity.class));
+                                        finish();
+                                    } else {
+                                        Log.e("DeleteAccount", "Falha ao deletar conta", task.getException());
+                                        // Tratar falha na exclusão da conta
+                                    }
+                                }
+                            });
+                }
+
+                finish();
+            }
+        });
+        builder.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Ação a ser executada se o usuário optar por não sair
+                dialog.dismiss();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     @Override
@@ -120,5 +182,24 @@ public class EditUser extends AppCompatActivity {
                         Log.d("db_error","Erro ao salvar os dados" + e.toString());
                     }
                 });
+    }
+
+    private void resetPassword(String novaSenha) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (user != null) {
+            user.updatePassword(novaSenha)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(EditUser.this, "Senha alterada com sucesso", Toast.LENGTH_SHORT).show();
+                                //finish(); // Fecha a atividade após a alteração da senha
+                            } else {
+                                Toast.makeText(EditUser.this, "Falha ao alterar a senha", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+        }
     }
 }

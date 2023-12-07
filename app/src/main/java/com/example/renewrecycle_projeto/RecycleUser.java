@@ -38,9 +38,11 @@ public class RecycleUser extends AppCompatActivity {
     Button Reciclar;
     private ImageView Voltar;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
+    EditText kg;
+    String nomeEmpresa, idEmpresa;
     String userID;
     String UserID;
-    String Nome, Endereco, Celular, pontosString, pesoEmpresa, PontosBD;
+    String Nome, Endereco, Celular, pontosString, pesoEmpresa, PontosBD, pontosAdc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +53,8 @@ public class RecycleUser extends AppCompatActivity {
         Voltar = findViewById(R.id.btnVoltar);
         // Recupera os dados do Intent
         Intent intent = getIntent();
-        String nomeEmpresa = intent.getStringExtra("nome");
+        nomeEmpresa = intent.getStringExtra("nome");
+        idEmpresa = intent.getStringExtra("idEmpresa");
         String enderecoEmpresa = intent.getStringExtra("endereco");
         String celularEmpresa = intent.getStringExtra("celular");
         String horarioEmpresa = intent.getStringExtra("horario");
@@ -84,6 +87,7 @@ public class RecycleUser extends AppCompatActivity {
             @Override
             public void onClick(View v) {
               startActivity(new Intent(RecycleUser.this, MapUser.class));
+              finish();
             }
         });
     }
@@ -114,8 +118,8 @@ public class RecycleUser extends AppCompatActivity {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.modal_recycle);
 
-
-        EditText kg = dialog.findViewById(R.id.kg);
+        TextView pontuacao = dialog.findViewById(R.id.pont);
+        kg = dialog.findViewById(R.id.kg);
         Button ok = dialog.findViewById(R.id.btnOK);
         ImageView voltar = dialog.findViewById(R.id.btnVoltar);
 
@@ -142,9 +146,13 @@ public class RecycleUser extends AppCompatActivity {
                         int pontosCalc = (100 * pesoUsuario) / pesoEmp;
                         int pontos = pontosCalc + pontosBD;
                         // Transformar pontos em String
+                        pontosAdc = String.valueOf(pontosCalc);
+                        pontuacao.setText(pontosAdc);               //TESTAR
                         pontosString = String.valueOf(pontos);
                         // Colocar pontosString no banco de dados
                         SalvarDadosUser();
+                        SalvarHistoricoUser();
+                        SalvarHistoricoEmp();
                         Toast.makeText(getApplicationContext(), "Pontos adicionados: " + pontosCalc, Toast.LENGTH_SHORT).show();
                     } catch (NumberFormatException e) {
                         // Tratar caso o texto não possa ser convertido para inteiro
@@ -194,6 +202,73 @@ public class RecycleUser extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.d("db_error","Erro ao salvar os dados" + e.toString());
+                    }
+                });
+    }
+
+    private void SalvarHistoricoUser(){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        // Obter a data atual
+        String dataAtual = java.text.DateFormat.getDateTimeInstance().format(new java.util.Date());
+
+        // Criar um novo documento na coleção "HistoricoUsuarios"
+        Map<String, Object> historico = new HashMap<>();
+        historico.put("data", dataAtual);
+        historico.put("pesoReciclado", kg.getText().toString());
+        historico.put("pontosRecebidos", pontosAdc);
+        historico.put("empresa", nomeEmpresa); // Substitua pelo nome real da empresa
+
+        // Obter a referência da coleção "HistoricoUsuarios" para o usuário atual
+        String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DocumentReference historicoRef = db.collection("HistoricoUsuarios").document(userID);
+
+        // Adicionar o novo documento na coleção "HistoricoUsuarios"
+        historicoRef.collection("Transacoes")
+                .add(historico)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d("db", "Sucesso ao salvar o histórico do usuário");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("db_error", "Erro ao salvar o histórico do usuário: " + e.toString());
+                    }
+                });
+    }
+
+    private void SalvarHistoricoEmp(){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        // Obter a data atual
+        String dataAtual = java.text.DateFormat.getDateTimeInstance().format(new java.util.Date());
+
+        // Criar um novo documento na coleção "HistoricoEmpresas"
+        Map<String, Object> historico = new HashMap<>();
+        historico.put("data", dataAtual);
+        historico.put("pesoReciclado", kg.getText().toString());
+        historico.put("pontosDados", pontosAdc);
+        historico.put("usuario", Nome); // Substitua pelo nome real do usuario
+
+        // Obter a referência da coleção "HistoricoEmpresas" para o usuário atual
+        DocumentReference historicoRef = db.collection("HistoricoEmpresas").document(idEmpresa);
+
+        // Adicionar o novo documento na coleção "HistoricoEmpresas"
+        historicoRef.collection("Transacoes")
+                .add(historico)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d("db", "Sucesso ao salvar o histórico da empresa");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("db_error", "Erro ao salvar o histórico da empresa: " + e.toString());
                     }
                 });
     }
